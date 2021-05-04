@@ -1,25 +1,27 @@
 package com.allure;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 public class UserTest {
 
+    private final SoftAssert asserter = new SoftAssert();
+
     @Test
-    public void userTest(){
+    public void userTest() {
         String name = "Ivan";
         User user = new User();
         user.setName(name);
 
-        Assert.assertEquals(user.getName(), name);
+        asserter.assertEquals(user.getName(), name);
     }
 
     @Test
-    public void userTestNegative(){
+    public void userTestNegative() {
         String name = "Ivan";
         User user = new User();
         user.setName(name);
 
-        Assert.assertEquals(user.getName(), "John");
+        asserter.assertEquals(user.getName(), "John");
     }
 }
