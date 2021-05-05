@@ -19,7 +19,7 @@ public class UserTest {
 
     @Test
     public void userTestNegative() {
-        String name = "Ivan";
+        String name = "John";
         User user = new User();
         user.setName(name);
 
