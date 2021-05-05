@@ -14,6 +14,7 @@ public class UserTest {
         user.setName(name);
 
         asserter.assertEquals(user.getName(), name);
+        asserter.assertAll();
     }
 
     @Test
@@ -23,5 +24,6 @@ public class UserTest {
         user.setName(name);
 
         asserter.assertEquals(user.getName(), "John");
+        asserter.assertAll();
     }
 }
