@@ -1,34 +1,64 @@
 package com.allure.service;
 
+import com.allure.models.ReportGenerateRequest;
+import com.allure.models.ReportResponse;
+import com.allure.models.ResultResponse;
+import com.allure.models.UploadResponse;
+import com.allure.utils.JsonUtils;
+import com.allure.utils.ResponseInfo;
+
 public class AllureService {
 
     //    TODO: need to implement
 
-//    GET /api/result
-//    Get all uploaded allure results archives
+    private final AllureAPI allureAPI = new AllureAPI();
 
-//    POST /api/result
-//    Upload allure-results.zip with allure results files before generating report. Don't forgot memorize uuid from response for further report generation
+    public ResultResponse[] getAllResults(){
+        ResponseInfo response = allureAPI.getAllResults();
+        return JsonUtils.toObject(response.getRawBody(), ResultResponse[].class);
+    }
 
-//    DELETE /api/result
-//    Delete all allure results
+    public ResultResponse getResultByUUID(String uuid){
+        return null;
+    }
 
-//    GET /api/result/{uuid}
-//    Get allure result by uuid
+    public UploadResponse postResultFile(String filename){
+        ResponseInfo response = allureAPI.postResultFile(filename);
+        return JsonUtils.toObject(response.getRawBody(), UploadResponse.class);
+    }
 
-//    DELETE /api/result/{uuid}
-//    Delete allure result by uuid
+    public ResultResponse[] deleteAllResults(){
+        return null;
+    }
 
-//    GET /api/report
-//    Get generated allure reports
+    public ResultResponse deleteResultByUUID(String uuid){
+        return null;
+    }
 
-//    POST /api/report
-//    Generate report
+    //    TODO: need to implement
 
-//    DELETE /api/report
-//    Delete all reports or older than date in epoch seconds
+    public ReportResponse[] getReports(){
+        return null;
+    }
 
-//    DELETE /api/report/history
-//    Clear all history reports
+    public ReportResponse getReport(String path){
+        return null;
+    }
+
+    public ReportResponse generateReport(ReportGenerateRequest requestData){
+        return null;
+    }
+
+    public ReportResponse[] deleteAllReports(){
+        return null;
+    }
+
+    public ReportResponse[] deleteAllReports(String seconds){
+        return null;
+    }
+
+    public ReportResponse[] deleteHistoryReports(){
+        return null;
+    }
 
 }

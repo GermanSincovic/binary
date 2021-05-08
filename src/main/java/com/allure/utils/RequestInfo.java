@@ -3,6 +3,7 @@ package com.allure.utils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 
+import java.io.File;
 import java.util.Map;
 
 public class RequestInfo {
@@ -11,7 +12,7 @@ public class RequestInfo {
     private RequestTypeEnum method;
     private Map<String, String> headers;
     private String rawBody;
-    private HttpEntity httpEntity;
+    private File file;
 
     public String getUrl() {
         return url;
@@ -29,8 +30,8 @@ public class RequestInfo {
         return rawBody;
     }
 
-    public HttpEntity getHttpEntity() {
-        return httpEntity;
+    public File getFile() {
+        return file;
     }
 
     public RequestInfo(String url, RequestTypeEnum method) {
@@ -51,18 +52,11 @@ public class RequestInfo {
         this.rawBody = rawBody;
     }
 
-    public RequestInfo(String url, RequestTypeEnum method, Map<String, String> headers, HttpEntity httpEntity) {
+    public RequestInfo(String url, RequestTypeEnum method, Map<String, String> headers, File file) {
         this.url = url;
         this.method = method;
         this.headers = headers;
-        this.httpEntity = httpEntity;
+        this.file = file;
     }
 
-    public RequestInfo(String url, RequestTypeEnum method, Map<String, String> headers, String rawBody, HttpEntity httpEntity) {
-        this.url = url;
-        this.method = method;
-        this.headers = headers;
-        this.rawBody = rawBody;
-        this.httpEntity = httpEntity;
-    }
 }

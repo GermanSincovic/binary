@@ -12,7 +12,7 @@ public class ResultResponse {
     @JsonProperty("size")
     private long size;
 
-    @JsonProperty("update_time")
-    private String updateTime;
+    @JsonProperty("created")
+    private String created;
 
 }

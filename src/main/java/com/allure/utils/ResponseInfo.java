@@ -1,25 +1,27 @@
 package com.allure.utils;
 
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.util.EntityUtils;
+import okhttp3.Headers;
+import okhttp3.Response;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class ResponseInfo {
 
     private final int responseCode;
     private String rawBody;
-    private final Header[] headers;
+    private final Headers headers;
 
-    public ResponseInfo(HttpResponse response) {
+    public ResponseInfo(Response response) {
         try {
-            this.rawBody = EntityUtils.toString(response.getEntity(), "UTF-8");
+            this.rawBody = Objects.requireNonNull(response.body()).string();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        this.responseCode = response.getStatusLine().getStatusCode();
-        this.headers = response.getAllHeaders();
+        this.responseCode = response.code();
+        this.headers = response.headers();
     }
 
     public int getResponseCode() {
@@ -30,7 +32,9 @@ public class ResponseInfo {
         return rawBody;
     }
 
-    public Header[] getHeaders() {
+    public Map<String, String> getHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        this.headers.forEach(pair -> headers.put(pair.component1(), pair.component2()));
         return headers;
     }
 }

@@ -1,19 +1,13 @@
 package com.allure.service;
 
 import com.allure.Config;
-import com.allure.models.DTO.ReportGenerateRequestParams;
+import com.allure.models.ReportGenerateRequest;
 import com.allure.utils.HttpHelper;
 import com.allure.utils.RequestInfo;
 import com.allure.utils.RequestTypeEnum;
 import com.allure.utils.ResponseInfo;
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,15 +35,11 @@ public class AllureAPI {
         return HttpHelper.makeCall(requestInfo);
     }
 
-    public ResponseInfo postResultFile(String textFileName) throws IOException {
+    public ResponseInfo postResultFile(String fileName) {
         String URL = String.format("%s%s", HOST, RESULTS_PATH);
-        FileBody fileBody = new FileBody(new File(textFileName), ContentType.DEFAULT_BINARY);
-        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-        builder.addPart("allureResults", fileBody);
-        HttpEntity entity = builder.build();
-
-        RequestInfo requestInfo = new RequestInfo(URL, RequestTypeEnum.POST, null, entity);
+        File file = new File(fileName);
+        System.out.println(file.getAbsolutePath());
+        RequestInfo requestInfo = new RequestInfo(URL, RequestTypeEnum.POST, null, new File(file.getAbsolutePath()));
         return HttpHelper.makeCall(requestInfo);
     }
 
@@ -81,7 +71,7 @@ public class AllureAPI {
         return HttpHelper.makeCall(requestInfo);
     }
 
-    public ResponseInfo postGenerateReport(ReportGenerateRequestParams params) {
+    public ResponseInfo postGenerateReport(ReportGenerateRequest params) {
         String URL = String.format("%s%s", HOST, REPORTS_PATH);
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");

@@ -1,81 +1,78 @@
 package com.allure.utils;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.*;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
+import okhttp3.*;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 public class HttpHelper {
 
     public static ResponseInfo makeCall(RequestInfo requestInfo) {
 
-        HttpClient client = HttpClientBuilder.create().build();
+        OkHttpClient client = new OkHttpClient().newBuilder().build();
 
-        if (requestInfo.getMethod() == RequestTypeEnum.GET) {
+        reportRequest(requestInfo);
 
-            HttpGet requester = new HttpGet(requestInfo.getUrl());
-            if (requestInfo.getHeaders() != null) {
-                requestInfo.getHeaders().forEach(requester::setHeader);
-            }
-            try {
-                return new ResponseInfo(client.execute(requester));
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+        RequestBody body = null;
 
-        } else if (requestInfo.getMethod() == RequestTypeEnum.POST){
-
-            HttpPost requester = new HttpPost(requestInfo.getUrl());
-            if (requestInfo.getHeaders() != null) {
-                requestInfo.getHeaders().forEach(requester::setHeader);
-            }
-            if (requestInfo.getRawBody() != null) {
-                try {
-                    requester.setEntity(new StringEntity(requestInfo.getRawBody()));
-                } catch (UnsupportedEncodingException e){
-                    System.out.println(e.getMessage());
-                }
-            }
-            try {
-                return new ResponseInfo(client.execute(requester));
-            } catch (IOException e){
-                System.out.println(e.getMessage());
-            }
-
-        } else if(requestInfo.getMethod() == RequestTypeEnum.PUT){
-            HttpPut requester = new HttpPut(requestInfo.getUrl());
-            if (requestInfo.getHeaders() != null) {
-                requestInfo.getHeaders().forEach(requester::setHeader);
-            }
-            if (requestInfo.getRawBody() != null) {
-                try {
-                    requester.setEntity(new StringEntity(requestInfo.getRawBody()));
-                } catch (UnsupportedEncodingException e){
-                    System.out.println(e.getMessage());
-                }
-            }
-            try {
-                return new ResponseInfo(client.execute(requester));
-            } catch (IOException e){
-                System.out.println(e.getMessage());
-            }
-        } else if(requestInfo.getMethod() == RequestTypeEnum.DELETE){
-            HttpDelete requester = new HttpDelete(requestInfo.getUrl());
-            if (requestInfo.getHeaders() != null) {
-                requestInfo.getHeaders().forEach(requester::setHeader);
-            }
-            try {
-                return new ResponseInfo(client.execute(requester));
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+        if (requestInfo.getRawBody() != null) {
+            MediaType mediaType = MediaType.parse("application/json");
+            body = RequestBody.create(mediaType, requestInfo.getRawBody());
         }
 
-        return null;
+        if (requestInfo.getFile() != null) {
+            body = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart(
+                            "allureResults",
+                            requestInfo.getFile().getName(),
+                            RequestBody.create(MediaType.parse("application/zip"),
+                                    requestInfo.getFile())
+                    )
+                    .build();
+        }
 
+        Request request = new Request.Builder()
+                .url(requestInfo.getUrl())
+                .method(requestInfo.getMethod().getMethod(), body)
+                .build();
+        ResponseInfo responseInfo = null;
+        try {
+            responseInfo = new ResponseInfo(client.newCall(request).execute());
+            reportResponse(responseInfo);
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+
+        return responseInfo;
+    }
+
+    private static void reportRequest(RequestInfo requestInfo) {
+        Reporter.info(String.format("NEW [%s] REQUEST TO: %s", requestInfo.getMethod(), requestInfo.getUrl()));
+        if (requestInfo.getHeaders() != null) {
+            Reporter.info(String.format("REQUEST HEADERS [%s]", requestInfo.getHeaders().toString()));
+        } else {
+            Reporter.info("REQUEST HEADERS []");
+        }
+        if (requestInfo.getRawBody() != null) {
+            Reporter.info(String.format("REQUEST BODY [%s]", requestInfo.getRawBody()));
+        } else {
+            Reporter.info("REQUEST BODY []");
+        }
+    }
+
+    private static void reportResponse(ResponseInfo responseInfo) {
+        Reporter.info(String.format("RESPONSE CODE [%s]", responseInfo.getResponseCode()));
+        if (responseInfo.getHeaders() != null) {
+            Reporter.info(String.format("RESPONSE HEADERS [%s]", responseInfo.getHeaders().toString()));
+        } else {
+            Reporter.info("RESPONSE HEADERS []");
+        }
+        if (responseInfo.getRawBody() != null) {
+            Reporter.info(String.format("RESPONSE BODY [%s]", responseInfo.getRawBody()));
+        } else {
+            Reporter.info("RESPONSE BODY []");
+        }
     }
 
 }
