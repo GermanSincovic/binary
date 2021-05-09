@@ -17,7 +17,7 @@ public class HttpHelper {
 
         if (requestInfo.getRawBody() != null) {
             MediaType mediaType = MediaType.parse("application/json");
-            body = RequestBody.create(mediaType, requestInfo.getRawBody());
+            body = RequestBody.create(requestInfo.getRawBody(), mediaType);
         }
 
         if (requestInfo.getFile() != null) {
@@ -26,8 +26,10 @@ public class HttpHelper {
                     .addFormDataPart(
                             "allureResults",
                             requestInfo.getFile().getName(),
-                            RequestBody.create(MediaType.parse("application/zip"),
-                                    requestInfo.getFile())
+                            RequestBody.create(
+                                    requestInfo.getFile(),
+                                    MediaType.parse("application/zip")
+                            )
                     )
                     .build();
         }
