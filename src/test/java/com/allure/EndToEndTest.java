@@ -51,11 +51,13 @@ public class EndToEndTest extends BaseTest {
         ReportResponse[] newReportResponses = ALLURE_SERVICE.getReports();
         Assert.assertEquals(Arrays.stream(newReportResponses).filter(r -> r.getUuid().equals(reportResponse.getUuid())).count(), 1, "New report not found!");
         Assert.assertEquals(newReportResponses.length, INITIAL_REPORTS.length + 1, "Reports total count failed!");
-        Reporter.path(String.format("Reports contains one new item - %s", uploadResponse.getUuid()));
+        Reporter.path(String.format("Reports contains one new item - %s", reportResponse.getUuid()));
 
         Reporter.info("Deleting last report by time...");
         long currentTimestamp = System.currentTimeMillis();
-        ReportResponse[] reportResponsesAfterDeletion = ALLURE_SERVICE.deleteAllReports((int)(currentTimestamp - testStartTimestamp));
+        int lastSeconds = (int)(currentTimestamp - testStartTimestamp)/1000*5;
+        ReportResponse[] deletionReportResponses = ALLURE_SERVICE.deleteAllReports(lastSeconds);
+        ReportResponse[] reportResponsesAfterDeletion = ALLURE_SERVICE.getReports();
         Assert.assertEquals(reportResponsesAfterDeletion.length, INITIAL_REPORTS.length, "Reports total count failed!");
         Reporter.path(String.format("There is no reports with UUID '%s'", reportResponse.getUuid()));
 
