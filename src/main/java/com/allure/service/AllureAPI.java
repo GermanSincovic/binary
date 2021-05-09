@@ -2,10 +2,7 @@ package com.allure.service;
 
 import com.allure.Config;
 import com.allure.models.ReportGenerateRequest;
-import com.allure.utils.HttpHelper;
-import com.allure.utils.RequestInfo;
-import com.allure.utils.RequestTypeEnum;
-import com.allure.utils.ResponseInfo;
+import com.allure.utils.*;
 
 import java.io.File;
 import java.util.HashMap;
@@ -38,7 +35,6 @@ public class AllureAPI {
     public ResponseInfo postResultFile(String fileName) {
         String URL = String.format("%s%s", HOST, RESULTS_PATH);
         File file = new File(fileName);
-        System.out.println(file.getAbsolutePath());
         RequestInfo requestInfo = new RequestInfo(URL, RequestTypeEnum.POST, null, new File(file.getAbsolutePath()));
         return HttpHelper.makeCall(requestInfo);
     }
@@ -60,10 +56,10 @@ public class AllureAPI {
 
 
     public ResponseInfo getReports() {
-        return getReports(null);
+        return getReport(null);
     }
 
-    public ResponseInfo getReports(String path) {
+    public ResponseInfo getReport(String path) {
         String URL = String.format("%s%s", HOST, REPORTS_PATH);
         if (path != null)
             URL = URL + "?path=" + path;
@@ -76,7 +72,7 @@ public class AllureAPI {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Content-type", "application/json");
-        RequestInfo requestInfo = new RequestInfo(URL, RequestTypeEnum.DELETE, headers);
+        RequestInfo requestInfo = new RequestInfo(URL, RequestTypeEnum.POST, headers, JsonUtils.toJson(params));
         return HttpHelper.makeCall(requestInfo);
     }
 

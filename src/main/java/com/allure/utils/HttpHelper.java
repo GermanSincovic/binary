@@ -50,28 +50,28 @@ public class HttpHelper {
     private static void reportRequest(RequestInfo requestInfo) {
         Reporter.info(String.format("NEW [%s] REQUEST TO: %s", requestInfo.getMethod(), requestInfo.getUrl()));
         if (requestInfo.getHeaders() != null) {
-            Reporter.info(String.format("REQUEST HEADERS [%s]", requestInfo.getHeaders().toString()));
+            Reporter.debug(String.format("REQUEST HEADERS [%s]", requestInfo.getHeaders().toString()));
         } else {
-            Reporter.info("REQUEST HEADERS []");
+            Reporter.debug("REQUEST HEADERS []");
         }
         if (requestInfo.getRawBody() != null) {
-            Reporter.info(String.format("REQUEST BODY [%s]", requestInfo.getRawBody()));
+            Reporter.debug(String.format("REQUEST BODY [%s]", requestInfo.getRawBody()));
         } else {
-            Reporter.info("REQUEST BODY []");
+            Reporter.debug("REQUEST BODY []");
         }
     }
 
     private static void reportResponse(ResponseInfo responseInfo) {
-        Reporter.info(String.format("RESPONSE CODE [%s]", responseInfo.getResponseCode()));
+        Reporter.debug(String.format("RESPONSE CODE [%s]", responseInfo.getResponseCode()));
         if (responseInfo.getHeaders() != null) {
-            Reporter.info(String.format("RESPONSE HEADERS [%s]", responseInfo.getHeaders().toString()));
+            Reporter.debug(String.format("RESPONSE HEADERS [%s]", responseInfo.getHeaders().toString()));
         } else {
-            Reporter.info("RESPONSE HEADERS []");
+            Reporter.debug("RESPONSE HEADERS []");
         }
         if (responseInfo.getRawBody() != null) {
-            Reporter.info(String.format("RESPONSE BODY [%s]", responseInfo.getRawBody()));
+            Reporter.debug(String.format("RESPONSE BODY [%s]", responseInfo.getRawBody()));
         } else {
-            Reporter.info("RESPONSE BODY []");
+            Reporter.debug("RESPONSE BODY []");
         }
     }
 

@@ -5,60 +5,57 @@ import com.allure.models.ReportResponse;
 import com.allure.models.ResultResponse;
 import com.allure.models.UploadResponse;
 import com.allure.utils.JsonUtils;
-import com.allure.utils.ResponseInfo;
 
 public class AllureService {
 
-    //    TODO: need to implement
+    //    RESULTS
 
     private final AllureAPI allureAPI = new AllureAPI();
 
-    public ResultResponse[] getAllResults(){
-        ResponseInfo response = allureAPI.getAllResults();
-        return JsonUtils.toObject(response.getRawBody(), ResultResponse[].class);
+    public ResultResponse[] getAllResults() {
+        return JsonUtils.toObject(allureAPI.getAllResults().getRawBody(), ResultResponse[].class);
     }
 
-    public ResultResponse getResultByUUID(String uuid){
-        return null;
+    public ResultResponse getResultByUUID(String uuid) {
+        return JsonUtils.toObject(allureAPI.getResultByUUID(uuid).getRawBody(), ResultResponse.class);
     }
 
-    public UploadResponse postResultFile(String filename){
-        ResponseInfo response = allureAPI.postResultFile(filename);
-        return JsonUtils.toObject(response.getRawBody(), UploadResponse.class);
+    public UploadResponse uploadResultFile(String filename) {
+        return JsonUtils.toObject(allureAPI.postResultFile(filename).getRawBody(), UploadResponse.class);
     }
 
-    public ResultResponse[] deleteAllResults(){
-        return null;
+    public ResultResponse[] deleteAllResults() {
+        return JsonUtils.toObject(allureAPI.deleteAllResults().getRawBody(), ResultResponse[].class);
     }
 
-    public ResultResponse deleteResultByUUID(String uuid){
-        return null;
+    public ResultResponse deleteResultByUUID(String uuid) {
+        return JsonUtils.toObject(allureAPI.deleteResultByUUID(uuid).getRawBody(), ResultResponse.class);
     }
 
-    //    TODO: need to implement
+    //    REPORTS
 
-    public ReportResponse[] getReports(){
-        return null;
+    public ReportResponse[] getReports() {
+        return JsonUtils.toObject(allureAPI.getReports().getRawBody(), ReportResponse[].class);
     }
 
-    public ReportResponse getReport(String path){
-        return null;
+    public ReportResponse getReport(String path) {
+        return JsonUtils.toObject(allureAPI.getReport(path).getRawBody(), ReportResponse.class);
     }
 
-    public ReportResponse generateReport(ReportGenerateRequest requestData){
-        return null;
+    public ReportResponse generateReport(ReportGenerateRequest requestData) {
+        return JsonUtils.toObject(allureAPI.postGenerateReport(requestData).getRawBody(), ReportResponse.class);
     }
 
-    public ReportResponse[] deleteAllReports(){
-        return null;
+    public ReportResponse[] deleteAllReports() {
+        return JsonUtils.toObject(allureAPI.deleteAllReports().getRawBody(), ReportResponse[].class);
     }
 
-    public ReportResponse[] deleteAllReports(String seconds){
-        return null;
+    public ReportResponse[] deleteAllReports(int seconds) {
+        return JsonUtils.toObject(allureAPI.deleteAllReports(seconds).getRawBody(), ReportResponse[].class);
     }
 
-    public ReportResponse[] deleteHistoryReports(){
-        return null;
+    public ReportResponse[] deleteHistoryReports() {
+        return JsonUtils.toObject(allureAPI.deleteHistoryReports().getRawBody(), ReportResponse[].class);
     }
 
 }
